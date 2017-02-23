@@ -22,4 +22,8 @@ fmt.Println(num,err)
 
 num2 := convert.MustInt(numStr)
 fmt.Println(num)
+
+var numStrArray := []string{"123","321"}
+numAry,err := convert.GetIntArray(numStrArray)
+fmt.Println(numAry,err)
 ```
