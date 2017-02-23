@@ -1,4 +1,4 @@
-package convert
+package convert // import "go.szyhf.org/di-convert"
 
 import (
 	"fmt"
