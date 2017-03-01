@@ -619,6 +619,7 @@ func ToUint(value interface{}) (res uint, err error) {
 			res, err = ToUint(valueStr)
 		}
 	}
+	return
 }
 
 // 尽最大努力将一个值转为uint8类型的数据
