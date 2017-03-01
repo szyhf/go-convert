@@ -220,12 +220,100 @@ func ToInt8(value interface{}) (res int8, err error) {
 // uint8~64、int8~64都会做默认的转换
 // bool类型的数据，true-1；false-0
 func ToInt16(value interface{}) (res int16, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
+	switch value.(type) {
+	case string:
+		{
+			valueString := value.(string)
+			if len(valueString) == 0 {
+				return 0, nil
+			}
+			//string的情况比较复杂，需要继续区分string是bool、float、int、uint再处理
+			if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
+				if resU64, erro := strconv.ParseUint(valueString, 0, 0); erro != nil {
+					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
+						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
+							err = fmt.Errorf("Convert string \"%s\" to int16 failed", value.(string))
+						} else {
+							res, err = ToInt16(resBool)
+						}
+					} else {
+						res, err = ToInt16(resF64)
+					}
+				} else {
+					res, err = ToInt16(resU64)
+				}
+
+			} else {
+				res = int16(res64)
+			}
 		}
-	}()
-	res = MustInt16(value)
+	case int:
+		{
+			res = int16(value.(int))
+		}
+	case int8:
+		{
+			res = int16(value.(int8))
+		}
+	case int16:
+		{
+			res = int16(value.(int16))
+		}
+	case int32:
+		{
+			res = int16(value.(int32))
+		}
+	case int64:
+		{
+			res = int16(value.(int64))
+		}
+	case uint:
+		{
+			res = int16(value.(uint))
+		}
+	case uint8:
+		{
+			res = int16(value.(uint8))
+		}
+	case uint16:
+		{
+			res = int16(value.(uint16))
+		}
+	case uint32:
+		{
+			res = int16(value.(uint32))
+		}
+	case uint64:
+		{
+			res = int16(value.(uint64))
+		}
+	case uintptr:
+		{
+			res = int16(value.(uintptr))
+		}
+
+	case float32:
+		{
+			res = int16(value.(float32))
+		}
+	case float64:
+		{
+			res = int16(value.(float64))
+		}
+	case bool:
+		{
+			if value.(bool) {
+				res = 1
+			} else {
+				res = 0
+			}
+		}
+	default:
+		{
+			valueStr := MustString(value)
+			res, err = ToInt16(valueStr)
+		}
+	}
 	return
 }
 
@@ -637,116 +725,6 @@ func MustUint64Array(value interface{}) (resArray []uint64) {
 		}
 	}
 	panic("Not an array or slice")
-	return
-}
-
-// 强制转换为int16，失败则panic
-// string会按顺序尝试将数据解析为int64\uint64\float64\bool，然后再转换为int16
-// float会抹去小数
-// uint8~64、int8~64都会做默认的转换
-// bool类型的数据，true-1；false-0
-func MustInt16(value interface{}) (res int16) {
-	var err error
-	switch value.(type) {
-	case string:
-		{
-			valueString := value.(string)
-			if len(valueString) == 0 {
-				return 0
-			}
-			//string的情况比较复杂，需要继续区分string是bool、float、int、uint再处理
-			if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
-				if resU64, erro := strconv.ParseUint(valueString, 0, 0); erro != nil {
-					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
-						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("Convert string \"%s\" to int16 failed", value.(string))
-						} else {
-							res = MustInt16(resBool)
-						}
-					} else {
-						res = MustInt16(resF64)
-					}
-				} else {
-					res = MustInt16(resU64)
-				}
-
-			} else {
-				res = int16(res64)
-			}
-		}
-	case int:
-		{
-			res = int16(value.(int))
-		}
-	case int8:
-		{
-			res = int16(value.(int8))
-		}
-	case int16:
-		{
-			res = int16(value.(int16))
-		}
-	case int32:
-		{
-			res = int16(value.(int32))
-		}
-	case int64:
-		{
-			res = int16(value.(int64))
-		}
-	case uint:
-		{
-			res = int16(value.(uint))
-		}
-	case uint8:
-		{
-			res = int16(value.(uint8))
-		}
-	case uint16:
-		{
-			res = int16(value.(uint16))
-		}
-	case uint32:
-		{
-			res = int16(value.(uint32))
-		}
-	case uint64:
-		{
-			res = int16(value.(uint64))
-		}
-	case uintptr:
-		{
-			res = int16(value.(uintptr))
-		}
-
-	case float32:
-		{
-			res = int16(value.(float32))
-		}
-	case float64:
-		{
-			res = int16(value.(float64))
-		}
-	case bool:
-		{
-			if value.(bool) {
-				res = 1
-			} else {
-				res = 0
-			}
-		}
-	default:
-		{
-
-			valueStr := MustString(value)
-			res, err = ToInt16(valueStr)
-
-		}
-	}
-
-	if err != nil {
-		panic(err)
-	}
 	return
 }
 
