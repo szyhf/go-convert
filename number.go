@@ -211,10 +211,6 @@ func ToInt8(value interface{}) (res int8, err error) {
 			res, err = ToInt8(valueStr)
 		}
 	}
-
-	if err != nil {
-		panic(err)
-	}
 	return
 }
 
