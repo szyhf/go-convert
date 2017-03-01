@@ -110,18 +110,111 @@ func ToInt(value interface{}) (res int, err error) {
 	return
 }
 
-// 尽最大努力将一个值转为int8类型的数据
+// 强制转换为int8，失败则panic
 // string会按顺序尝试将数据解析为int64\uint64\float64\bool，然后再转换为int8
 // float会抹去小数
 // uint8~64、int8~64都会做默认的转换
 // bool类型的数据，true-1；false-0
 func ToInt8(value interface{}) (res int8, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
+	switch value.(type) {
+	case string:
+		{
+			valueString := value.(string)
+			if len(valueString) == 0 {
+				return 0, nil
+			}
+			//string的情况比较复杂，需要继续区分string是bool、float、int、uint再处理
+			if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
+				if resU64, erro := strconv.ParseUint(valueString, 0, 0); erro != nil {
+					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
+						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
+							err = fmt.Errorf("Convert string \"%s\" to int8 failed", value.(string))
+						} else {
+							res, err = ToInt8(resBool)
+						}
+					} else {
+						res, err = ToInt8(resF64)
+					}
+				} else {
+					res, err = ToInt8(resU64)
+				}
+
+			} else {
+				res = int8(res64)
+			}
 		}
-	}()
-	res = MustInt8(value)
+	case int:
+		{
+			res = int8(value.(int))
+		}
+	case int8:
+		{
+			res = int8(value.(int8))
+		}
+	case int16:
+		{
+			res = int8(value.(int16))
+		}
+	case int32:
+		{
+			res = int8(value.(int32))
+		}
+	case int64:
+		{
+			res = int8(value.(int64))
+		}
+	case uint:
+		{
+			res = int8(value.(uint))
+		}
+	case uint8:
+		{
+			res = int8(value.(uint8))
+		}
+	case uint16:
+		{
+			res = int8(value.(uint16))
+		}
+	case uint32:
+		{
+			res = int8(value.(uint32))
+		}
+	case uint64:
+		{
+			res = int8(value.(uint64))
+		}
+	case uintptr:
+		{
+			res = int8(value.(uintptr))
+		}
+
+	case float32:
+		{
+			res = int8(value.(float32))
+		}
+	case float64:
+		{
+			res = int8(value.(float64))
+		}
+	case bool:
+		{
+			if value.(bool) {
+				res = 1
+			} else {
+				res = 0
+			}
+		}
+	default:
+		{
+
+			valueStr := MustString(value)
+			res, err = ToInt8(valueStr)
+		}
+	}
+
+	if err != nil {
+		panic(err)
+	}
 	return
 }
 
@@ -548,115 +641,6 @@ func MustUint64Array(value interface{}) (resArray []uint64) {
 		}
 	}
 	panic("Not an array or slice")
-	return
-}
-
-// 强制转换为int8，失败则panic
-// string会按顺序尝试将数据解析为int64\uint64\float64\bool，然后再转换为int8
-// float会抹去小数
-// uint8~64、int8~64都会做默认的转换
-// bool类型的数据，true-1；false-0
-func MustInt8(value interface{}) (res int8) {
-	var err error
-	switch value.(type) {
-	case string:
-		{
-			valueString := value.(string)
-			if len(valueString) == 0 {
-				return 0
-			}
-			//string的情况比较复杂，需要继续区分string是bool、float、int、uint再处理
-			if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
-				if resU64, erro := strconv.ParseUint(valueString, 0, 0); erro != nil {
-					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
-						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("Convert string \"%s\" to int8 failed", value.(string))
-						} else {
-							res = MustInt8(resBool)
-						}
-					} else {
-						res = MustInt8(resF64)
-					}
-				} else {
-					res = MustInt8(resU64)
-				}
-
-			} else {
-				res = int8(res64)
-			}
-		}
-	case int:
-		{
-			res = int8(value.(int))
-		}
-	case int8:
-		{
-			res = int8(value.(int8))
-		}
-	case int16:
-		{
-			res = int8(value.(int16))
-		}
-	case int32:
-		{
-			res = int8(value.(int32))
-		}
-	case int64:
-		{
-			res = int8(value.(int64))
-		}
-	case uint:
-		{
-			res = int8(value.(uint))
-		}
-	case uint8:
-		{
-			res = int8(value.(uint8))
-		}
-	case uint16:
-		{
-			res = int8(value.(uint16))
-		}
-	case uint32:
-		{
-			res = int8(value.(uint32))
-		}
-	case uint64:
-		{
-			res = int8(value.(uint64))
-		}
-	case uintptr:
-		{
-			res = int8(value.(uintptr))
-		}
-
-	case float32:
-		{
-			res = int8(value.(float32))
-		}
-	case float64:
-		{
-			res = int8(value.(float64))
-		}
-	case bool:
-		{
-			if value.(bool) {
-				res = 1
-			} else {
-				res = 0
-			}
-		}
-	default:
-		{
-
-			valueStr := MustString(value)
-			res, err = ToInt8(valueStr)
-		}
-	}
-
-	if err != nil {
-		panic(err)
-	}
 	return
 }
 
