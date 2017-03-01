@@ -9,17 +9,7 @@ import (
 // 要求Array所有元素都是同一种类型，虽然支持指针混用但建议尽可能避免。
 // ary := []interface{}{foo{ID: 1, Field: "foo1"}, &foo{ID: 2, Field: "foo22"}}
 // fieldAry := Explode(ary,"Field") // []interface{}{"foo1","foo22"}
-func ExplodeStructField(array interface{}, field string) (explodeArray []interface{}, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("panic on Explode() ,err: %v", r)
-		}
-	}()
-	explodeArray = MustExplodeStructField(array, field)
-	return
-}
-
-func MustExplodeStructField(array interface{}, field string) (explodeArray []interface{}) {
+func ToExplodeStructField(array interface{}, field string) (explodeArray []interface{}, err error) {
 	// 跳过Type的检查，异常自己处理=。=
 	// 传入不是Array或者Slice的面壁去。。
 	v := reflect.ValueOf(array)
@@ -39,10 +29,18 @@ func MustExplodeStructField(array interface{}, field string) (explodeArray []int
 			if fStruct, ok := t.FieldByName(field); ok {
 				fieldIndex = fStruct.Index
 			} else {
-				panic(fmt.Sprintf("Invalid field : %s not exist in %v at array[%v]", field, eV, i))
+				return nil, fmt.Errorf("Invalid field : %s not exist in %v at array[%v]", field, eV, i)
 			}
 		}
 		explodeArray[i] = eV.FieldByIndex(fieldIndex).Interface()
 	}
 	return
+}
+
+func MustExplodeStructField(array interface{}, field string) (explodeArray []interface{}) {
+	if explodeArray, err := ToExplodeStructField(array, field); err != nil {
+		panic(err)
+	} else {
+		return explodeArray
+	}
 }
