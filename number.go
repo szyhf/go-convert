@@ -525,13 +525,100 @@ func ToInt64(value interface{}) (res int64, err error) {
 // uint8~64、int8~64都会做默认的转换
 // bool类型的数据，true-1；false-0
 func ToUint(value interface{}) (res uint, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
+	switch value.(type) {
+	case string:
+		{
+			valueString := value.(string)
+			if len(valueString) == 0 {
+				return 0, nil
+			}
+			//string的情况比较复杂，需要继续区分string是bool、float、int、uint再处理
+			if resU64, erro := strconv.ParseUint(valueString, 0, 0); erro != nil {
+				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
+					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
+						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
+							err = fmt.Errorf("Convert string \"%s\" to Uint failed", value.(string))
+						} else {
+							res, err = ToUint(resBool)
+						}
+					} else {
+						res, err = ToUint(resF64)
+					}
+				} else {
+					res, err = ToUint(res64)
+				}
+			} else {
+				res = uint(resU64)
+			}
 		}
-	}()
-	res = MustUint(value)
-	return
+	case int:
+		{
+			res = uint(value.(int))
+		}
+	case int8:
+		{
+			res = uint(value.(int8))
+		}
+	case int16:
+		{
+			res = uint(value.(int16))
+		}
+	case int32:
+		{
+			res = uint(value.(int32))
+		}
+	case int64:
+		{
+			res = uint(value.(int64))
+		}
+
+	case uint:
+		{
+			res = uint(value.(uint))
+		}
+	case uint8:
+		{
+			res = uint(value.(uint8))
+		}
+	case uint16:
+		{
+			res = uint(value.(uint16))
+		}
+	case uint32:
+		{
+			res = uint(value.(uint32))
+		}
+	case uint64:
+		{
+			res = uint(value.(uint64))
+		}
+	case uintptr:
+		{
+			res = uint(value.(uintptr))
+		}
+
+	case float32:
+		{
+			res = uint(value.(float32))
+		}
+	case float64:
+		{
+			res = uint(value.(float64))
+		}
+	case bool:
+		{
+			if value.(bool) {
+				res = 1
+			} else {
+				res = 0
+			}
+		}
+	default:
+		{
+			valueStr := MustString(value)
+			res, err = ToUint(valueStr)
+		}
+	}
 }
 
 // 尽最大努力将一个值转为uint8类型的数据
@@ -897,115 +984,6 @@ func MustUint64Array(value interface{}) (resArray []uint64) {
 		}
 	}
 	panic("Not an array or slice")
-	return
-}
-
-// 强制转换为uint，失败则panic
-// string会按顺序尝试将数据解析为int64\uint64\float64\bool，然后再转换为uint；空字符串会转化为0.
-// float会抹去小数
-// uint8~64、int8~64都会做默认的转换
-// bool类型的数据，true-1；false-0
-func MustUint(value interface{}) (res uint) {
-	var err error
-
-	switch value.(type) {
-	case string:
-		{
-			valueString := value.(string)
-			if len(valueString) == 0 {
-				return 0
-			}
-			//string的情况比较复杂，需要继续区分string是bool、float、int、uint再处理
-			if resU64, erro := strconv.ParseUint(valueString, 0, 0); erro != nil {
-				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
-					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
-						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("Convert string \"%s\" to Uint failed", value.(string))
-						} else {
-							res = MustUint(resBool)
-						}
-					} else {
-						res = MustUint(resF64)
-					}
-				} else {
-					res = MustUint(res64)
-				}
-			} else {
-				res = uint(resU64)
-			}
-		}
-	case int:
-		{
-			res = uint(value.(int))
-		}
-	case int8:
-		{
-			res = uint(value.(int8))
-		}
-	case int16:
-		{
-			res = uint(value.(int16))
-		}
-	case int32:
-		{
-			res = uint(value.(int32))
-		}
-	case int64:
-		{
-			res = uint(value.(int64))
-		}
-
-	case uint:
-		{
-			res = uint(value.(uint))
-		}
-	case uint8:
-		{
-			res = uint(value.(uint8))
-		}
-	case uint16:
-		{
-			res = uint(value.(uint16))
-		}
-	case uint32:
-		{
-			res = uint(value.(uint32))
-		}
-	case uint64:
-		{
-			res = uint(value.(uint64))
-		}
-	case uintptr:
-		{
-			res = uint(value.(uintptr))
-		}
-
-	case float32:
-		{
-			res = uint(value.(float32))
-		}
-	case float64:
-		{
-			res = uint(value.(float64))
-		}
-	case bool:
-		{
-			if value.(bool) {
-				res = 1
-			} else {
-				res = 0
-			}
-		}
-	default:
-		{
-			valueStr := MustString(value)
-			res, err = ToUint(valueStr)
-		}
-	}
-
-	if err != nil {
-		panic(err)
-	}
 	return
 }
 
