@@ -110,7 +110,7 @@ func ToInt(value interface{}) (res int, err error) {
 	return
 }
 
-// 强制转换为int8，失败则panic
+// 尽最大努力将一个值转为int8类型的数据
 // string会按顺序尝试将数据解析为int64\uint64\float64\bool，然后再转换为int8
 // float会抹去小数
 // uint8~64、int8~64都会做默认的转换
