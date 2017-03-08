@@ -72,7 +72,7 @@ func MustMapStringInterfaceRecursionsInArrayInterface(leafAry interface{}) []int
 
 		switch nodeType.Kind() {
 		case reflect.Array, reflect.Slice:
-			temp := mustMapStringInterfaceRecursionsInArrayInterface(node)
+			temp := MustMapStringInterfaceRecursionsInArrayInterface(node)
 			if temp != nil {
 				resAry = append(resAry, temp)
 			}
