@@ -28,6 +28,9 @@ func MustMapStringInterfaceRecursions(leafMap interface{}) map[string]interface{
 		// 获得实际的key和node
 		k := leafKeyValue.Interface()
 		node := nodeValue.Interface()
+		if nodeValue.IsNil() {
+			continue
+		}
 
 		strKey := MustString(k)
 		nodeType := reflect.TypeOf(node)
