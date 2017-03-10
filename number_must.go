@@ -24,7 +24,6 @@ func MustInt8(value interface{}) (res int8) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为int16，失败则panic
@@ -38,7 +37,6 @@ func MustInt16(value interface{}) (res int16) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为int32，失败则panic
@@ -52,7 +50,6 @@ func MustInt32(value interface{}) (res int32) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为int64，失败则panic
@@ -66,7 +63,6 @@ func MustInt64(value interface{}) (res int64) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为uint，失败则panic
@@ -80,7 +76,6 @@ func MustUint(value interface{}) (res uint) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为uint8，失败则panic
@@ -94,7 +89,6 @@ func MustUint8(value interface{}) (res uint8) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为uint16，失败则panic
@@ -108,7 +102,6 @@ func MustUint16(value interface{}) (res uint16) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为uint32，失败则panic
@@ -122,7 +115,6 @@ func MustUint32(value interface{}) (res uint32) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 // 强制转换为uint64，失败则panic
@@ -136,7 +128,6 @@ func MustUint64(value interface{}) (res uint64) {
 	} else {
 		panic(err)
 	}
-	return
 }
 
 func MustFloat64(value interface{}) (res float64) {
@@ -145,5 +136,4 @@ func MustFloat64(value interface{}) (res float64) {
 	} else {
 		panic(err)
 	}
-	return
 }

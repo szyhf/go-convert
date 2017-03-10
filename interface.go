@@ -5,30 +5,27 @@ import (
 	"reflect"
 )
 
-func MustInterfaceArray(array interface{}) (resArray []interface{}) {
+func MustInterfaceArray(array interface{}) []interface{} {
+	if resArray, err := ToInterfaceArray(array); err == nil {
+		return resArray
+	} else {
+		panic(err)
+	}
+}
+
+func ToInterfaceArray(array interface{}) ([]interface{}, error) {
 	t := reflect.TypeOf(array)
 	switch t.Kind() {
 	case reflect.Array:
 	case reflect.Slice:
 		{
 			v := reflect.ValueOf(array)
-			resArray = make([]interface{}, v.Len())
+			resArray := make([]interface{}, v.Len())
 			for index, _ := range resArray {
 				resArray[index] = v.Index(index).Interface()
 			}
-			return
+			return resArray, nil
 		}
 	}
-	panic("Not an array or slice")
-	return
-}
-
-func ToInterfaceArray(array interface{}) (res []interface{}, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
-		}
-	}()
-	res = MustInterfaceArray(array)
-	return
+	return nil, fmt.Errorf("convert: %T is not an array or slice.", array)
 }
