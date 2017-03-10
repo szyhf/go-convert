@@ -16,8 +16,7 @@ func MustInterfaceArray(array interface{}) []interface{} {
 func ToInterfaceArray(array interface{}) ([]interface{}, error) {
 	t := reflect.TypeOf(array)
 	switch t.Kind() {
-	case reflect.Array:
-	case reflect.Slice:
+	case reflect.Array, reflect.Slice:
 		{
 			v := reflect.ValueOf(array)
 			resArray := make([]interface{}, v.Len())
