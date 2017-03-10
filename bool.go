@@ -30,7 +30,7 @@ func ToBool(value interface{}) (res bool, err error) {
 					res = false
 				}
 			default:
-				err = fmt.Errorf("Convert %v to boolean failed.", value)
+				err = fmt.Errorf("convert: %v to boolean failed.", value)
 			}
 		}
 	case bool:
