@@ -7,13 +7,13 @@ golang的基础数据类型相互转换包。
 # 安装
 
 ```
-go get -u -v go.szyhf.org/di-convert
+go get -u -v github.com/szyhf/go-convert
 ```
 
 # 例子
 
 ```golang
-import convert"go.szyhf.org/di-convert"
+import convert "github.com/szyhf/go-convert"
 import "fmt"
 
 var numStr := "123"
