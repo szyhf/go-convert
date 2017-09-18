@@ -7,7 +7,14 @@ import (
 
 // 强制转换一个对象为string
 func MustString(value interface{}) string {
-	return fmt.Sprintf("%v", value)
+	switch v := value.(type) {
+	case fmt.Stringer:
+		return v.String()
+	case string:
+		return v
+	default:
+		return fmt.Sprintf("%v", value)
+	}
 }
 
 // 转换一个对象为string

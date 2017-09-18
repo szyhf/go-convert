@@ -537,7 +537,7 @@ func ToUint(value interface{}) (res uint, err error) {
 				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to uint failed", value.(string))
 						} else {
 							res, err = ToUint(resBool)
 						}
@@ -640,7 +640,7 @@ func ToUint8(value interface{}) (res uint8, err error) {
 				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint8 failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to uint8 failed", value.(string))
 						} else {
 							res, err = ToUint8(resBool)
 						}
@@ -743,7 +743,7 @@ func ToUint16(value interface{}) (res uint16, err error) {
 				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint16 failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to uint16 failed", value.(string))
 						} else {
 							res, err = ToUint16(resBool)
 						}
@@ -846,7 +846,7 @@ func ToUint32(value interface{}) (res uint32, err error) {
 				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint32 failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to uint32 failed", value.(string))
 						} else {
 							res, err = ToUint32(resBool)
 						}
@@ -949,7 +949,7 @@ func ToUint64(value interface{}) (res uint64, err error) {
 				if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 					if resF64, erro := strconv.ParseFloat(valueString, 0); erro != nil {
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint64 failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to uint64 failed", value.(string))
 						} else {
 							res, err = ToUint64(resBool)
 						}
@@ -1052,7 +1052,7 @@ func ToFloat32(value interface{}) (res float32, err error) {
 					if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint64 failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to float32 failed", value.(string))
 						} else {
 							res, err = ToFloat32(resBool)
 						}
@@ -1155,7 +1155,7 @@ func ToFloat64(value interface{}) (res float64, err error) {
 					if res64, erro := strconv.ParseInt(valueString, 0, 0); erro != nil {
 
 						if resBool, erro := strconv.ParseBool(valueString); erro != nil {
-							err = fmt.Errorf("convert: string \"%s\" to Uint64 failed", value.(string))
+							err = fmt.Errorf("convert: string \"%s\" to float64 failed", value.(string))
 						} else {
 							res, err = ToFloat64(resBool)
 						}
